@@ -64,7 +64,8 @@ function create(req, res, next) {
     sex:  req.body.sex,
     weight : req.body.weight,
     location : req.body.location,
-    owner: req.body.owners
+    owner: req.body.owners,
+    relative:req.body.relative
   });
   let something=dog.findSth();
   console.log("something:"+something);
@@ -87,6 +88,7 @@ function update(req, res, next) {
   dog.weight = req.body.weight;
   dog.location = req.body.location;
   dog.owner = req.body.owners;
+  relative = req.body.relative;
   dog.save()
     .then(savedDog => res.json(savedDog))
     .catch(e => next(e));

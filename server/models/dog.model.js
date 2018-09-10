@@ -6,6 +6,23 @@ import APIError from '../helpers/APIError';
 /**
  * Dog Schema
  */
+const relativeSchema = new mongoose.Schema({
+  name:{
+    type:String
+  },
+  relationship:{
+    type:String
+  }
+
+});
+
+relativeSchema.pre('save', function (next) {
+  console.log("pre validation for sub document");
+  if ('invalid' == this.name) {
+    return next(new Error('#sadpanda'));
+  }
+  next();
+});
 const DogSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -24,6 +41,7 @@ const DogSchema = new mongoose.Schema({
       type: String
    },
   owner:[{name:{type:String},sex:{type:String},address:{type:String}}],
+  relative:[relativeSchema],
   createdAt: {
     type: Date,
     default: Date.now
