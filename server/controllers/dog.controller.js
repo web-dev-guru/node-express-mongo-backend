@@ -11,12 +11,24 @@ function load(req, res, next, id) {
     })
     .catch(e => next(e));
 }
+
+function getDogsByLocation(req,res){
+  return res.json(req.dogs);
+}
+function loadByLocation(req, res, next, location) {
+  Dog.listByLocation(location)
+    .then((dogs) => {
+      req.dogs=dogs;
+      return next();
+    })
+    .catch(e => next(e));
+}
 /**
  * Get dog
  * @returns {Dog}
  */
 function get(req, res) {
- console.log('eeeeeeeeeeeeeeeeeeeee');
+ console.log('dog controller get method');
   return res.json(req.dog);
 }
 /**
@@ -54,7 +66,8 @@ function create(req, res, next) {
     location : req.body.location,
     owner: req.body.owners
   });
-
+  let something=dog.findSth();
+  console.log("something:"+something);
   dog.save()
     .then(savedDog => res.json(savedDog))
     .catch(e => next(e));
@@ -104,6 +117,7 @@ function addOwnerById(req, res, next) {
  * @returns {Dog[]}
  */
 function list(req, res, next) {
+
   const { limit = 50, skip = 0 } = req.query;
   Dog.list({ limit, skip })
     .then(dogs => res.json(dogs))
@@ -131,4 +145,4 @@ function removeOwnerById(req, res, next) {
 function getOwnersById(req,res,next){
   return res.json(req.dog.owner);
 }
-export default { load, get, create, update, list, remove ,getImage,getOwnersById,updateOwnerById,removeOwnerById};
+export default { load, get, create, update, list, remove ,getImage,getOwnersById,updateOwnerById,removeOwnerById,loadByLocation,getDogsByLocation};

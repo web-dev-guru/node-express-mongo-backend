@@ -41,6 +41,9 @@ const DogSchema = new mongoose.Schema({
  * Methods
  */
 DogSchema.method({
+  findSth(){
+    return "this is come from schema method";
+  }
 });
 
 /**
@@ -65,6 +68,11 @@ DogSchema.statics = {
       });
   },
 
+  listByLocation(location){
+    return this.find({"location":location})
+    .sort({ createdAt: -1 })
+    .exec();
+  },
   /**
    * List dogs in descending order of 'createdAt' timestamp.
    * @param {number} skip - Number of dogs to be skipped.
