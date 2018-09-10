@@ -107,7 +107,9 @@ function updateOwnerById(req, res, next) {
 function addOwnerById(req, res, next) {
   console.log("get into the update OwnerById");
   const dog = req.dog;
-  dog.owner = req.body.owners;
+  console.log("before push "+dog.owner);
+  dog.owner.push(req.body.owners);
+  console.log("after push"+dog.owner);
   dog.save()
     .then(savedDog => res.json(savedDog))
     .catch(e => next(e));
@@ -139,10 +141,9 @@ function remove(req, res, next) {
 
 function removeOwnerById(req, res, next) {
   const dog = req.dog;
-  dog.owner = [];
-    dog.save()
-      .then(savedDog => res.json(savedDog))
-      .catch(e => next(e));
+  dog.owner.remove()
+    .then(deletedDog => res.json(deletedDog))
+    .catch(e => next(e));
 }
 function getOwnersById(req,res,next){
   return res.json(req.dog.owner);
