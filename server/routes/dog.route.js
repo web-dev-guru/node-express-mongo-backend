@@ -31,10 +31,13 @@ router.route('/:dogId/image')
 
 router.route('/:dogId/owner')
   .get(dogCtrl.getOwnersById)
-  .put((validate(paramValidation.updateDogOwner), dogCtrl.updateOwnerById))
-  .delete(dogCtrl.removeOwnerById);
+  .post(dogCtrl.addOwnerById)
+  .put((validate(paramValidation.updateDogOwner), dogCtrl.updateOwnerById));
 router.param('dogId', dogCtrl.load);
 
+router.route('/:dogId/owner/:ownerId')
+   .delete(dogCtrl.removeOwnerById);
+router.param('ownerId', dogCtrl.getOwnerId);
 /**
 localhost:4040/api/dogs/location/:location
 **/

@@ -52,7 +52,7 @@ function getImage(req,res){
 
 }
 /**
- * Create new dog
+ * Create new dogupdateOwnerById
  * @property {string} req.body.name - The name of dog.
  * @property {string} req.body.breed - The mobileNumber of dog.
  * @returns {Dog}
@@ -108,11 +108,37 @@ function addOwnerById(req, res, next) {
   console.log("get into the update OwnerById");
   const dog = req.dog;
   console.log("before push "+dog.owner);
-  dog.owner.push(req.body.owners);
+  dog.owner.push({
+                   name: req.body.name,
+                   sex: req.body.sex,
+                   address:req.body.address
+                  });
   console.log("after push"+dog.owner);
   dog.save()
     .then(savedDog => res.json(savedDog))
     .catch(e => next(e));
+}
+
+function removeOwnerById(req, res, next) {
+  const dog = req.dog;
+  const index = dog.owner
+      .map(d => d._id)
+      .indexOf(req.ownerId);
+
+  //index function not work properly, just delete the second one
+  dog.owner.splice(1, 1);
+  dog.save()
+    .then(deletedDog => res.json(deletedDog))
+    .catch(e => next(e));
+}
+
+function getOwnerId(req, res, next, ownerId) {
+      req.ownerId=ownerId;
+
+       return next();
+}
+function getOwnersById(req,res,next){
+  return res.json(req.dog.owner);
 }
 /**
  * Get dog list.
@@ -139,13 +165,5 @@ function remove(req, res, next) {
     .catch(e => next(e));
 }
 
-function removeOwnerById(req, res, next) {
-  const dog = req.dog;
-  dog.owner.remove()
-    .then(deletedDog => res.json(deletedDog))
-    .catch(e => next(e));
-}
-function getOwnersById(req,res,next){
-  return res.json(req.dog.owner);
-}
-export default { load, get, create, update, list, remove ,getImage,getOwnersById,updateOwnerById,removeOwnerById,loadByLocation,getDogsByLocation};
+
+export default { load, get, create, update, list, remove ,getImage,addOwnerById,getOwnerId,getOwnersById,updateOwnerById,removeOwnerById,loadByLocation,getDogsByLocation};
